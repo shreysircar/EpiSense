@@ -1,9 +1,12 @@
+import ChatContainer from "./components/ChatContainer"
+
 export default function Home() {
   return (
-    <main className="min-h-screen flex items-center justify-center">
-      <h1 className="text-4xl font-bold">
-        AI Skin Disease Detector
-      </h1>
+    <main className="h-screen flex items-center justify-center
+    bg-gradient-to-br from-[#0B0F19] via-[#0F172A] to-[#020617]">
+
+      <ChatContainer />
+
     </main>
   )
 }
