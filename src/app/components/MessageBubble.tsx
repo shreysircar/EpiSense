@@ -1,9 +1,10 @@
 type Props = {
   role: string
-  content: string
+  content?: string
+  image?: string
 }
 
-export default function MessageBubble({ role, content }: Props) {
+export default function MessageBubble({ role, content, image }: Props) {
 
   const isUser = role === "user"
 
@@ -18,15 +19,28 @@ export default function MessageBubble({ role, content }: Props) {
         </div>
       )}
 
-      <div
-        className={`max-w-[70%] p-4 rounded-2xl text-sm
-        ${
-          isUser
-            ? "bg-blue-600 text-white"
-            : "bg-[#1F2937] text-gray-200"
-        }`}
-      >
-        {content}
+      <div className="max-w-[70%]">
+
+        {image && (
+          <img
+            src={image}
+            className="rounded-xl max-h-[220px] object-cover"
+          />
+        )}
+
+        {content && (
+          <div
+            className={`p-4 rounded-2xl text-sm mt-2
+            ${
+              isUser
+                ? "bg-blue-600 text-white"
+                : "bg-[#1F2937] text-gray-200"
+            }`}
+          >
+            {content}
+          </div>
+        )}
+
       </div>
 
       {isUser && (

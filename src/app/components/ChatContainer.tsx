@@ -7,13 +7,13 @@ import ImageUpload from "./ImageUpload"
 
 export default function ChatContainer() {
 
-  const [messages] = useState([
-    {
-      role: "assistant",
-      content:
-        "Hello! Upload a skin image and I will analyze it for possible dermatological conditions."
-    }
-  ])
+const [messages, setMessages] = useState([
+  {
+    role: "assistant",
+    content:
+      "Hello! Upload a skin image and I will analyze it for possible dermatological conditions."
+  }
+])
 
   return (
     <div className="w-[760px] h-[85vh]
@@ -65,7 +65,7 @@ export default function ChatContainer() {
 
       </div>
 
-      <ImageUpload />
+      <ImageUpload setMessages={setMessages} />
 
       <ChatInput />
 
