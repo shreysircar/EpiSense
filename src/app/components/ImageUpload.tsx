@@ -2,7 +2,11 @@
 
 import { useRef } from "react"
 
-export default function ImageUpload({ setMessages }: any) {
+type Props = {
+  addMessage: (msg: any) => void
+}
+
+export default function ImageUpload({ addMessage }: Props) {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -10,47 +14,44 @@ export default function ImageUpload({ setMessages }: any) {
     fileInputRef.current?.click()
   }
 
-const handleFile = async (e: any) => {
+  const handleFile = async (e: any) => {
+    const file = e.target.files[0]
+    if (!file) return
 
-  const file = e.target.files[0]
-  if (!file) return
+    const imageURL = URL.createObjectURL(file)
 
-  const imageURL = URL.createObjectURL(file)
-
-  // show user image + AI thinking
-  setMessages((prev: any) => [
-    ...prev,
-    {
+    // ✅ Show user image
+    addMessage({
       role: "user",
       image: imageURL
-    },
-    {
+    })
+
+    // ✅ Show loading message
+    addMessage({
       role: "assistant",
       content: "Analyzing skin image..."
-    }
-  ])
+    })
 
-  const formData = new FormData()
-  formData.append("file", file)
+    const formData = new FormData()
+    formData.append("file", file)
 
-  const res = await fetch("http://127.0.0.1:5000/predict", {
-    method: "POST",
-    body: formData
-  })
+    const res = await fetch("http://127.0.0.1:5000/predict", {
+      method: "POST",
+      body: formData
+    })
 
-  const data = await res.json()
+    const data = await res.json()
 
-  setMessages((prev: any) => [
-    ...prev,
-    {
-content: `🧬 Diagnosis: ${data.disease}
+    // ✅ Show result
+    addMessage({
+      role: "assistant",
+      content: `🧬 Diagnosis: ${data.disease}
 
 📊 Confidence: ${(data.confidence * 100).toFixed(2)}%
 
 ${data.explanation || ""}`
-    }
-  ])
-}
+    })
+  }
 
   return (
     <div className="px-4 pb-3">
@@ -67,7 +68,6 @@ ${data.explanation || ""}`
         cursor-pointer
         transition"
       >
-
         Drag & drop skin image here
 
         <br />
@@ -83,7 +83,6 @@ ${data.explanation || ""}`
           onChange={handleFile}
           className="hidden"
         />
-
       </div>
 
     </div>
